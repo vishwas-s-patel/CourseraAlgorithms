@@ -1,5 +1,7 @@
 */.idea/*
+.idea/*
 */.lift/*
+.lift/*
 *.txt
 *.png
 *.class
