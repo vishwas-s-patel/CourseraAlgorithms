@@ -3,7 +3,6 @@
  *  Date:
  *  Description:
  **************************************************************************** */
-
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
@@ -114,3 +113,4 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
 }
+
