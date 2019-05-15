@@ -3,95 +3,90 @@
  *  Date:
  *  Description:
  **************************************************************************** */
+
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
 
+
 public class RandomizedQueue<Item> implements Iterable<Item> {
     private Item[] RandQueue;
+    private int noOfELe;
+    private int first = 0;
+    private int last = 0;
 
-    private int noOfEle;
-
-    public RandomizedQueue() {              // construct an empty randomized queue
+    public RandomizedQueue() {
         RandQueue = (Item[]) new Object[2];
-        noOfEle = 0;
+        noOfELe = 0;
+        last = 0;
     }
 
-    public boolean isEmpty() {                 // is the randomized queue empty?
-        return (noOfEle == 0);
+    public boolean isEmpty() {
+        return (noOfELe == 0);
     }
 
-    public int size() {                       // return the number of items on the randomized queue
-        return noOfEle;
+    public int size() {
+        return noOfELe;
     }
 
-    private void resize(int length) {
-        RandQueue = ()
+    public void resize(int length) {
+        Item[] temp = (Item[]) Object(length);
+        int j = 0;
+
+        for (int i = 0; i < RandQueue.length; i++) {
+            if (RandQueue[i] != null) {
+                temp[j] = RandQueue[i];
+                j++;
+            }
+            last = noOfELe;
+            RandQueue = temp;
+        }
     }
 
-    public void enqueue(Item item) {           // add the item
-        if (item == null)
+    public void enqueue(Item item) {
+        if (item == null) {
             throw new java.lang.IllegalArgumentException("item cannot be null");
+        }
 
-        if (noOfEle == RandQueue.length) {
+        if (noOfELe == RandQueue.length) {
             resize(2 * RandQueue.length);
         }
-        RandQueue[noOfEle] = item;
-        noOfEle++;
+
+        RandQueue[last] = item;
+        last++;
+
+        if (last == RandQueue.length)
+            last = 0;
+
+        noOfELe++;
     }
 
-    public Item dequeue() {                    // remove and return a random item
-        int random;
-        Item res;
-        Node temp;
-
-        if (noOfEle == 0) {
+    public Item dequeue() {
+        if (isEmpty())
             throw new java.util.NoSuchElementException("Randomized Queue is empty");
-        }
-        random = StdRandom.uniform(noOfEle);
-        Node iter = first;
-        temp = first;
-        while ((random > 0) && (iter != null)) {
-            random--;
-            temp = iter;
-            iter = iter.next;
-        }
-        res = iter.item;
 
-        if (iter.next == null) {
-            temp.next = null;
-            iter = null;
+        int randEleIndex;
+        Item item;
+        randEleIndex = StdRandom.uniform(noOfELe);
+
+        item = RandQueue[randEleIndex];
+        RandQueue[randEleIndex] = null;
+
+        if (noOfELe > 0 && (noOfELe == RandQueue.length / 4)) {
+            resize(RandQueue.length / 2);
         }
-        else {
-            temp.next = iter.next;
-            iter = null;
-        }
+        return item;
     }
 
-    public Item sample() {                     // return a random item (but do not remove it)
-        int random;
-
-        if (noOfEle == 0) {
-            throw new java.util.NoSuchElementException("Randomized Queue is empty");
-        }
-        random = StdRandom.uniform(noOfEle);
-        Node temp = first;
-        while ((random > 0) && (temp != null)) {
-            random--;
-            temp = temp.next;
-        }
-        return temp.item;
+    public Iterator<Item> ierator() {
+        return new RandQueueIterator();
     }
 
-    public Iterator<Item> iterator() {        // return an independent iterator over items in random order
-        return new RandomizedQueueIterator();
-    }
-
-    private class RandomizedQueueIterator implements Iterator<Item> {
+    private class RandQueueIterator implements Iterator<Item> {
         private int[] shuffleArray;
 
-        public RandomizedQueueIterator() {
-            shuffleArray = new int[noOfEle];
+        public RandQueueIterator() {
+            shuffleArray = new int[noOfELe];
             StdRandom.shuffle(shuffleArray);
         }
 
@@ -109,8 +104,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
     }
 
-    public static void main(String[] args) {   // unit testing (optional)
+    public void main() {
+
     }
-
 }
-
