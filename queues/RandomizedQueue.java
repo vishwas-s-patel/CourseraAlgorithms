@@ -29,7 +29,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     public void resize(int length) {
-        Item[] temp = (Item[]) Object(length);
+        Item[] temp = (Item[]) new Object[length];
         int j = 0;
 
         for (int i = 0; i < RandQueue.length; i++) {
@@ -37,9 +37,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
                 temp[j] = RandQueue[i];
                 j++;
             }
-            last = noOfEle;
-            RandQueue = temp;
         }
+        last = noOfEle;
+        RandQueue = temp;
     }
 
     public void enqueue(Item item) {
@@ -74,6 +74,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (noOfEle > 0 && (noOfEle == RandQueue.length / 4)) {
             resize(RandQueue.length / 2);
         }
+
+        noOfEle--;
         return item;
     }
 
@@ -83,27 +85,70 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private class RandQueueIterator implements Iterator<Item> {
         private int[] shuffleArray;
+        private int shuffleIter;
+        private int iter;
 
         public RandQueueIterator() {
-            shuffleArray = new int[noOfEle];
+            shuffleArray = new int[RandQueue.length];
+            for (int i = 0; i < RandQueue.length; i++)
+                shuffleArray[i] = i;
             StdRandom.shuffle(shuffleArray);
+            iter = 0;
+            shuffleIter = 0;
         }
 
         public boolean hasNext() {
-
-        }
-
-        public Item next() {
-
+            return (iter < noOfEle);
         }
 
         public void remove() {
             /* */
             throw new java.lang.UnsupportedOperationException("Unsupported operation");
         }
+
+        public Item next() {
+            Item item;
+            if (!hasNext()) {
+                throw new java.util.NoSuchElementException("Deque is empty, no such element");
+            }
+
+            while (RandQueue[shuffleArray[shuffleIter]] == null) {
+                shuffleIter++;
+            }
+
+            item = RandQueue[shuffleArray[shuffleIter]];
+            shuffleIter++;
+            iter++;
+
+            return item;
+        }
     }
 
-    public void main() {
+    public static void main(String[] args) {
+        RandomizedQueue<String> rq = new RandomizedQueue<String>();
 
+        rq.enqueue("10");
+        rq.enqueue("20");
+        rq.enqueue("30");
+        rq.enqueue("40");
+        rq.enqueue("50");
+        rq.enqueue("60");
+
+        System.out.println(rq.dequeue());
+
+        Iterator<String> iter = rq.iterator();
+        System.out.println("Iterator First\n");
+
+        while (iter.hasNext()) {
+            System.out.println(iter.next());
+        }
+
+        Iterator<String> iter1 = rq.iterator();
+
+        System.out.println("Iterator Second\n");
+
+        while (iter1.hasNext()) {
+            System.out.println(iter1.next());
+        }
     }
 }
