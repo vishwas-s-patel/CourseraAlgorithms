@@ -11,22 +11,21 @@ import java.util.Iterator;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
     private Item[] RandQueue;
-    private int noOfELe;
-    private int first = 0;
-    private int last = 0;
+    private int noOfEle;
+    private int last;
 
     public RandomizedQueue() {
         RandQueue = (Item[]) new Object[2];
-        noOfELe = 0;
+        noOfEle = 0;
         last = 0;
     }
 
     public boolean isEmpty() {
-        return (noOfELe == 0);
+        return (noOfEle == 0);
     }
 
     public int size() {
-        return noOfELe;
+        return noOfEle;
     }
 
     public void resize(int length) {
@@ -38,7 +37,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
                 temp[j] = RandQueue[i];
                 j++;
             }
-            last = noOfELe;
+            last = noOfEle;
             RandQueue = temp;
         }
     }
@@ -48,7 +47,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             throw new java.lang.IllegalArgumentException("item cannot be null");
         }
 
-        if (noOfELe == RandQueue.length) {
+        if (noOfEle == RandQueue.length) {
             resize(2 * RandQueue.length);
         }
 
@@ -58,7 +57,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (last == RandQueue.length)
             last = 0;
 
-        noOfELe++;
+        noOfEle++;
     }
 
     public Item dequeue() {
@@ -67,18 +66,18 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
         int randEleIndex;
         Item item;
-        randEleIndex = StdRandom.uniform(noOfELe);
+        randEleIndex = StdRandom.uniform(noOfEle);
 
         item = RandQueue[randEleIndex];
         RandQueue[randEleIndex] = null;
 
-        if (noOfELe > 0 && (noOfELe == RandQueue.length / 4)) {
+        if (noOfEle > 0 && (noOfEle == RandQueue.length / 4)) {
             resize(RandQueue.length / 2);
         }
         return item;
     }
 
-    public Iterator<Item> ierator() {
+    public Iterator<Item> iterator() {
         return new RandQueueIterator();
     }
 
@@ -86,7 +85,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         private int[] shuffleArray;
 
         public RandQueueIterator() {
-            shuffleArray = new int[noOfELe];
+            shuffleArray = new int[noOfEle];
             StdRandom.shuffle(shuffleArray);
         }
 
